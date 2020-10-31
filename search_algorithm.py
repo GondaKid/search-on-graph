@@ -117,8 +117,6 @@ def DFS(graph, edges, edge_id, start, goal):
         if not queue:
             raise Exception("Can not find required path!")
 
-        print(queue)
-
         # Take out current node from the queue and add it to discovered
         current_node = queue.popleft()
         # Color it
@@ -165,8 +163,10 @@ def UCS(graph, edges, edge_id, start, goal):
     # Implement queue
     queue = PriorityQueue()  # Use priority queue for auto sort
     queue.put((0, start))
+
     # Implement discovered and parent dictionary for traceback
     parent = {start: None}
+
     while True:
         # Check if queue is empty
         if queue.qsize() == 0:
@@ -184,11 +184,13 @@ def UCS(graph, edges, edge_id, start, goal):
         # Loop adjacent nodes to and add to queue if it've not been discovered
         for adjacent_node in graph[current_node][1]:
             if adjacent_node not in parent:
+                # Calculate current path cost
                 adjacent_cost = current_cost + calculate_euclide_dist(graph, current_node, adjacent_node)
                 queue.put((adjacent_cost, adjacent_node))
 
                 # Also add discovered node to parent dict
                 parent[adjacent_node] = current_node
+
                 # update color for discovered node and edge
                 color(graph, edges, edge_id, start, goal, nodes=[
                     {"node": adjacent_node, "color": red}], edge_path=[current_node, adjacent_node], edge_color=white)
@@ -234,10 +236,12 @@ def AStar(graph, edges, edge_id, start, goal):
                 adjacent_gScore = current_gScore + calculate_euclide_dist(graph, current_node, adjacent_node)
                 adjacent_hScore = heuristic(graph, adjacent_node, goal)
                 adjacent_fScore = adjacent_gScore + adjacent_hScore
+
                 fringe.put((adjacent_fScore, adjacent_gScore, adjacent_node))
 
                 # Also add discovered node to parent dict
                 parent[adjacent_node] = current_node
+
                 # update color for discovered node and edge
                 color(graph, edges, edge_id, start, goal, nodes=[
                     {"node": adjacent_node, "color": red}], edge_path=[current_node, adjacent_node], edge_color=white)
@@ -286,6 +290,7 @@ def Greedy(graph, edges, edge_id, start, goal):
 
                 # Also add discovered node to parent dict
                 parent[adjacent_node] = current_node
+                
                 # update color for discovered node and edge
                 color(graph, edges, edge_id, start, goal, nodes=[
                     {"node": adjacent_node, "color": red}], edge_path=[current_node, adjacent_node], edge_color=white)
